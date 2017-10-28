@@ -1,0 +1,124 @@
+<html>
+<head>
+   <title>Clock web</title>
+   <meta name="viewport" content="width=deivce-width,initial-scale=1.0" />
+   <meta name="theme-color" content="#222" />
+   <style>
+     body {font-family:monospace; padding:0;margin:0;}
+     .song-list {list-style:none; margin:10px; padding:0; }
+     .song-display{display:block; padding:10px; border:1px solid #ccc; margin-bottom:5px;}
+     .song-item input:checked + .song-display { color:#fff; background:steelblue; }
+     .song-item input {display:none;}
+     .btn{ min-width:80px; display:inline-block; padding:10px 20px; outline:none; border:none; border-radius:5px; color:#fff; background:#66b; text-align:center;}
+     .btn-upload input {display:none;}
+     .yt-download-form {margin:5px;}
+     .btn:disabled {background-color:#ccc}
+     img {width:100%;}
+    
+   </style>
+</head>
+<body>
+<header>
+<img src="https://i.imgur.com/jwQ4RPp.gif">
+</header>
+<ul class="song-list"></ul>
+<div style="margin:5px; text-align:center;">
+<button class="btn" id="btnFile">&#128194;&nbsp; Add File</button>&nbsp;
+<button class="btn" id="btnYT">&#9654;&nbsp; Add from Youtube</button>
+</div>
+<input id="fileUpload" type="file" name="upload" accept=".mp3,audio/*" style="display:none;">
+<script type="text/javascript">
+  function postData(action, params, done){
+    var xhr = new XMLHttpRequest ();
+    xhr.open('POST', action);
+    var data = new FormData();
+    for(var key in params)
+      data.append(key, params[key]);
+    xhr.send(data); 
+    xhr.onload = done;
+  }
+  function handleFile(e){
+    var file = this.files[0];
+    postData('/upload', {'song' : file});
+    songlist.add(file.name);
+  }
+  document.querySelector("#fileUpload").addEventListener('change', handleFile);
+  document.querySelector("#btnFile").addEventListener('click', 
+     function(){ document.querySelector("#fileUpload").click(); });
+  function handleYT(e){
+    e.preventDefault();
+    var btn = this;
+    btn.setAttribute('disabled', 'disabled');
+    var yturl = prompt("Enter youtbe url");
+    if(!yturl) return btn.removeAttribute('disabled'), null;
+    var regex = /(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/;
+    var match = yturl.match(regex);
+    function done(){
+      songlist.load();
+      btn.removeAttribute('disabled');
+    }
+    if(match != null){
+      var ytid = yturl.match(regex)[1];
+      postData('/yt', {ytid: ytid}, done);
+    } else {
+      alert('invalid youtube url');
+      btn.removeAttribute('disabled')
+    }
+  }
+  document.querySelector("#btnYT").addEventListener('click', handleYT);
+  function playSong(songname){
+    postData('/play', {song: songname});
+  }
+  function stopSong(songname){
+    postData('/stop', {song: songname});
+  }
+  function SongList(el){
+    var songitems = [];
+    function SongItem(songname){
+      this.el = document.createElement('li');
+      this.el.innerHTML = '<label class="song-item">' +
+        '<input type="radio" name="songlist1" value="'+songname+'">' +
+        '<span class="song-display">' + songname + '</span></label>';
+      var radio = this.el.querySelector('input');
+      this.songname = songname;
+      var wasChecked = false;
+      this.el.addEventListener('touchstart', function(e){
+        wasChecked = radio.checked;
+      });
+      this.el.addEventListener('click', function(e){
+        if(e.target.className === 'song-display'){
+          if(wasChecked){
+            setTimeout(function(){ radio.checked = false; }, 200);
+            stopSong();
+          } else
+            playSong(songname);
+        }
+      });
+    }
+    /* add song */
+    function addSong(songname){
+      var songitem = new SongItem(songname);
+      el.appendChild(songitem.el);
+      songitems.push(songitem)
+    }
+    /* read song list */
+    function loadSongs(){
+      songitems = []; // clear
+      el.innerHTML = ''; // clear
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/songs');
+      xhr.onload = function(){
+        var data = JSON.parse(xhr.responseText);
+        for(var i=0; i<data.length; i++)
+          addSong(data[i]);
+      }
+      xhr.send(null);
+    }
+    return { load: loadSongs, add: addSong }
+  }
+  var songlist = 
+    SongList(document.querySelector('.song-list'));
+  songlist.load();
+</script>
+</body>
+</html>

@@ -13,6 +13,7 @@
     "formidable": "^1.1.1",
     "node-omxplayer": "^0.6.1",
     "play-sound": "^1.1.1",
+    "spi": "^0.2.0",
     "youtube-to-mp3": "^0.1.1"
   }
 }

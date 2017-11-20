@@ -7,6 +7,7 @@ var spawn = require('child_process').spawn;
 var yt2mp3 = require('youtube-to-mp3');
 var ytmp3 = new yt2mp3();
 var audio_proc = null;
+var led = require('./led')
 
 
 
@@ -89,6 +90,16 @@ app.post('/upload', function(req, res){
     res.send('ok');
   });
 });
+
+app.post('/message', function(){
+  formidable.IncomingForm().parse(req, function(err, fields, files){
+    if(fields.message){
+      console.log(fields.message);
+      led.showMessage(fields.message);
+    }
+  });
+  res.send('ok');
+})
 
 app.listen(8090, function(){
   console.log("Listening on port 8090");

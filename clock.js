@@ -6,6 +6,6 @@ function loop(){
 }
 function getHoursLeft(){
   var m = new Date(2080, 0, 1) - new Date();
-  return m * 1000 * 3600;
+  return m / 1000 / 3600;
 }
 setInterval(loop, 1000);

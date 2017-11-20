@@ -91,7 +91,7 @@ app.post('/upload', function(req, res){
   });
 });
 
-app.post('/message', function(){
+app.post('/message', function(req, res){
   formidable.IncomingForm().parse(req, function(err, fields, files){
     if(fields.message){
       console.log(fields.message);
@@ -100,7 +100,7 @@ app.post('/message', function(){
   });
   res.send('ok');
 })
-
+led.showNumber(32.5);
 app.listen(8090, function(){
   console.log("Listening on port 8090");
 });

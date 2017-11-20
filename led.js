@@ -124,11 +124,11 @@ function showNumber(number, show_decimal, fit){
 	var lenFraction = fit - lenWhole;
 	fractionPart = Math.floor(fractionPart * Math.pow(10, lenFraction))
 	fractionPart = fractionPart == 0 ? '' : fractionPart.toString();
-  for(var i=fit-1; i>=0; i--){
-		if(i >= lenFraction)
-			setDigit(i+1, wholePart[i - lenFraction], i === lenFraction && show_decimal)
+  for(var i=lenWhole+lenFraction; i>=0; i--){
+		if(i > lenFraction)
+			setDigit(i-1, wholePart[lenWhole - (i - lenFraction)], i-1 === lenFraction && show_decimal)
 		else
-			setDigit(i+1, lenFraction[i - lenWhole]);
+			setDigit(i-1, fractionPart[lenFraction- i]);
 	}
 }
 var messageTimer = null;

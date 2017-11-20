@@ -19,6 +19,7 @@ function init(){
   write([0XC, 1])
 }
 var DIGITS = {
+  '': 0,
   '0': 0b01111110,
   '1': 0b00110000,
   '2': 0b01101101,
@@ -35,12 +36,11 @@ function setDigit(position, digit, dot){
   if(typeof(digit) == 'string')
     digit = DIGITS[digit] || 0;
   digit = digit | dot << 7;
-  console.log(digit)
   write([position + 0x01, digit])
 }
 function show(digits){
 	for(var i=0; i<digits.length;i++){
-		setDigit(i+1, buf[i]);
+		setDigit(i, digits[i]);
 	}
 }
 function showNumber(number, show_decimal, fit){
@@ -60,24 +60,29 @@ function showNumber(number, show_decimal, fit){
 	}
 }
 var messageTimer = null;
-function showMessage(message, fit){
+function showMessage(message, speed, fit){
 	if(messageTimer != null) throw "Scrolling message already active";
 	if(fit == undefined) fit = 8;
 	message = message.split('');
 	var buffer = [];
-	for(var i=0; i<fit;i++){ buffer.push(0); message.push(''); }
+	for(var i=0; i<fit;i++){ buffer.push(''); message.push(''); }
 	var indexInMessage = 0;
   function interval(){
-		buffer.unshift(message[indexInMessage]).pop();
+		buffer.pop();
+		buffer.unshift(message[indexInMessage]);
+		console.log(buffer);
 		show(buffer);
 		if(++indexInMessage >= message.length){
 			clearInterval(messageTimer);
 			messageTimer = null;
 		}
 	}
-	messageTimer = setInterval(interval, 1000);
+	messageTimer = setInterval(interval, speed || 500);
 }
-showMessage('123456');
+init();
+show(['','','','','','','','']);
+showMessage('12345678');
+//setDigit(0,2)
 module.exports = {init: init,
 	setDigit: setDigit,
 	showMessage: showMessage,

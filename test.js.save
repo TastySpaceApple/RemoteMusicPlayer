@@ -1,0 +1,8 @@
+xvar SPI = require('pi-spi');
+var spi = SPI.initialize("/dev/spidev0.0");
+var MAX7219_REG_SCANLIMIT = 0xB;
+var buf = new Buffer([0xB, 7])
+spi.transfer(buf, buf.length, function(e,d){
+	if(e) conole.log(e)
+	else console.log("got" + d.toString());
+})

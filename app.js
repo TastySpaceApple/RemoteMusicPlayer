@@ -8,7 +8,7 @@ var yt2mp3 = require('youtube-to-mp3');
 var ytmp3 = new yt2mp3();
 var audio_proc = null;
 var led = require('./led')
-
+var clock = require('./clock')
 
 
 var songs = [];
@@ -32,7 +32,11 @@ function play(songname){
   stop();
   audio_proc = spawn('omxplayer', [songpath, '--loop', '-o', 'local', '--no-osd']);
   clock.pause();
-  led.showMessage('Now Playing ' + songname).then(clock.start);
+  songname = songname.slice(0, -4);
+  songname = songname.toUpperCase();
+  if(songname.length > 15)
+    songname = songname.substring(0, 12) + '...'
+  led.showMessage('NOW PLAYING - ' + songname).then(clock.start);
 }
 function stop(){
   if(audio_proc != null){

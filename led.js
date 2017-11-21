@@ -101,7 +101,8 @@ var DIGITS = {
 			 'Y': 0x3b,
 			 'Z': 0x6d,
 			 ',': 0x80,
-			 '.': 0x80
+			 '.': 0x80,
+			 ':' : 0b00000110
 	 }
 function setDigit(position, digit, dot){
   if(!dot) dot = 0;
@@ -124,6 +125,7 @@ function showNumber(number, show_decimal, fit){
 	var lenFraction = fit - lenWhole;
 	fractionPart = Math.floor(fractionPart * Math.pow(10, lenFraction))
 	fractionPart = fractionPart == 0 ? '' : fractionPart.toString();
+  while(fractionPart.length < lenFraction) fractionPart = '0' + fractionPart;
   for(var i=lenWhole+lenFraction; i>=0; i--){
 		if(i > lenFraction)
 			setDigit(i-1, wholePart[lenWhole - (i - lenFraction)], i-1 === lenFraction && show_decimal)
@@ -138,6 +140,9 @@ function showMessage(message, speed, fit){
 	//if(messageTimer != null) throw "Scrolling message already active";
 	if(messageTimer != null) {messageCanceled(); clearInterval(messageTimer);}
 	if(fit == undefined) fit = 8;
+	message = message.replace(/w/g, 'uu')
+	message = message.replace(/W/g, 'UU');
+	message = message.replace(/M/g, 'NN');
 	message = message.split('');
 	var buffer = [];
 	for(var i=0; i<fit;i++){ buffer.push(''); message.push(''); }
@@ -145,7 +150,6 @@ function showMessage(message, speed, fit){
   function interval(){
 		buffer.pop();
 		buffer.unshift(message[indexInMessage]);
-		console.log(buffer);
 		show(buffer);
 		if(++indexInMessage >= message.length){
 			clearInterval(messageTimer);

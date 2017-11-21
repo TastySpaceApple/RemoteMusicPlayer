@@ -16,6 +16,6 @@ function pause(){
   clearInterval(timer);
 }
 module.exports = {
-  start : start
+  start : start,
   pause: pause
 }

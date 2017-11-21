@@ -85,6 +85,7 @@ var DIGITS = {
 			 'I': 0x30,
 			 'J': 0x38,
 			 // 'K': cant represent
+			 'K': 0x37, // fix: H is close enough...
 			 'L': 0x0e,
 			 // 'M': cant represent
 			 'N': 0x76,
@@ -102,7 +103,8 @@ var DIGITS = {
 			 'Z': 0x6d,
 			 ',': 0x80,
 			 '.': 0x80,
-			 ':' : 0b00000110
+			 ':' : 0b00000110,
+			 '@' : 0x5f
 	 }
 
 var HEBREW_DIGITS = {
@@ -159,7 +161,7 @@ function showNumber(number, show_decimal, fit){
 var messageTimer = null;
 var messageDone = function(){};
 var messageCanceled = function(){};
-function showMessage(message, speed, fit){
+function showMessage(message, direction, speed, fit){
 	//if(messageTimer != null) throw "Scrolling message already active";
 	if(messageTimer != null) {messageCanceled(); clearInterval(messageTimer);}
 	if(fit == undefined) fit = 8;
@@ -171,8 +173,14 @@ function showMessage(message, speed, fit){
 	for(var i=0; i<fit;i++){ buffer.push(''); message.push(''); }
 	var indexInMessage = 0;
   function interval(){
-		buffer.pop();
-		buffer.unshift(message[indexInMessage]);
+		if(direction == 'rtl'){
+		  buffer.shift();
+		  buffer.push(message[indexInMessage]);
+		}
+		else{
+		  buffer.pop();
+		  buffer.unshift(message[indexInMessage]);
+		}
 		show(buffer);
 		if(++indexInMessage >= message.length){
 			clearInterval(messageTimer);

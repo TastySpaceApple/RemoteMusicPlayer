@@ -101,7 +101,7 @@ app.post('/message', function(req, res){
   formidable.IncomingForm().parse(req, function(err, fields, files){
     if(fields.message){
       clock.pause();
-      led.showMessage(fields.message).then(clock.start);
+      led.showMessage(fields.message, fields.direction).then(clock.start);
     }
   });
   res.send('ok');

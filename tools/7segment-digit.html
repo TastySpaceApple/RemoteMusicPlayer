@@ -1,0 +1,30 @@
+<html>
+<body style="text-align:center;">
+  <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+    <g>
+      <path style="fill: #ececec; fill-rule: evenodd; stroke: black; stroke-width: 1px; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 1; font-size: 24px;" d="M 190.79731,72.5 L 175.58534,88 L 116.58535,88 L 101.06756,72.5 L 116.58535,57 L 175.58534,57 L 190.79731,72.5 z " id="path1872" data-position="0" sodipodi:nodetypes="ccccccc"></path>
+      <path style="fill:#ececec;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-size:24" d="M 190.79731,154 L 175.58534,169.5 L 116.58535,169.5 L 101.06756,154 L 116.58535,138.5 L 175.58534,138.5 L 190.79731,154 z " id="path2779" data-position="6" sodipodi:nodetypes="ccccccc"></path>
+      <path style="fill:#ececec;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-size:24" d="M 98,75.38513 L 113.5,90.59709 L 113.5,135.59708 L 98,151.11487 L 82.5,135.59708 L 82.5,90.59709 L 98,75.38513 z " id="path2781" data-position="5" sodipodi:nodetypes="ccccccc"></path>
+      <path style="fill: #ececec; fill-rule: evenodd; stroke: black; stroke-width: 1px; stroke-linecap: butt; stroke-linejoin: miter; stroke-opacity: 1; font-size: 24px;" d="M 194,75.38513 L 209.5,90.59709 L 209.5,135.59708 L 194,151.11487 L 178.5,135.59708 L 178.5,90.59709 L 194,75.38513 z " id="path2789" data-position="1" sodipodi:nodetypes="ccccccc"></path>
+      <path style="fill:#ececec;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-size:24" d="M 190.79731,236.05743 L 175.58534,251.55743 L 116.58535,251.55743 L 101.06756,236.05743 L 116.58535,220.55743 L 175.58534,220.55743 L 190.79731,236.05743 z " id="path2791" data-position="3" sodipodi:nodetypes="ccccccc"></path>
+      <path style="fill:#ececec;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-size:24" d="M 98,157.44257 L 113.5,172.65453 L 113.5,217.65452 L 98,233.1723 L 82.5,217.65452 L 82.5,172.65453 L 98,157.44257 z " id="path2793" data-position="4" sodipodi:nodetypes="ccccccc"></path>
+      <path style="fill:#ececec;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-size:24" d="M 194,157.44257 L 209.5,172.65453 L 209.5,217.65452 L 194,233.1723 L 178.5,217.65452 L 178.5,172.65453 L 194,157.44257 z " id="path2795" data-position="2" sodipodi:nodetypes="ccccccc"></path>
+    </g>
+  </svg>
+  <div>
+<input type="text" id="result">
+</div>
+<script>
+  var number = [0,0,0,0,0,0,0];
+  document.querySelector('svg').addEventListener('click', function(e){
+    var pos = e.target.dataset.position;
+    if(pos != undefined){
+      number[pos] = !number[pos] + 0;
+      e.target.style.fill = number[pos] ? 'red' : '#ececec';
+    }
+    document.querySelector('#result').value =
+      '0x' + parseInt('0' +number.join(''), 2).toString(16);
+  })
+</script>
+</body>
+</html>

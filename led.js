@@ -104,6 +104,29 @@ var DIGITS = {
 			 '.': 0x80,
 			 ':' : 0b00000110
 	 }
+
+var HEBREW_DIGITS = {
+	'א': Number(0x37),
+	'ג': Number(0x75),
+	'ה': Number(0x74),
+	'ו': Number(0x30),
+	'ח': Number(0x76),
+	'י': Number(0x20),
+	'כ': Number(0x78),
+	'ל': Number(0x1b),
+	'נ': Number(0x38),
+	'ס': Number(0x1d),
+	'פ': Number(0x7a),
+	'צ': Number(0x79),
+	'ק': Number(0x74),
+	'ר': Number(0x70),
+	'ם': Number(0x7e),
+	'ן': Number(0x30),
+	'ך': Number(0x70),
+	'ף': Number(0x72),
+	'ץ': Number(0x33)
+}
+Object.assign(DIGITS, HEBREW_DIGITS)
 function setDigit(position, digit, dot){
   if(!dot) dot = 0;
   if(typeof(digit) == 'string')

@@ -31,6 +31,8 @@ function play(songname){
   var songpath = path.join(songsFolder, songname);
   stop();
   audio_proc = spawn('omxplayer', [songpath, '--loop', '-o', 'local', '--no-osd']);
+  clock.pause();
+  led.showMessage('Now Playing ' + songname).then(clock.start);
 }
 function stop(){
   if(audio_proc != null){
@@ -94,13 +96,15 @@ app.post('/upload', function(req, res){
 app.post('/message', function(req, res){
   formidable.IncomingForm().parse(req, function(err, fields, files){
     if(fields.message){
-      console.log(fields.message);
-      led.showMessage(fields.message);
+      clock.pause();
+      led.showMessage(fields.message).then(clock.start);
     }
   });
   res.send('ok');
 })
-led.showNumber(32.5);
+
+clock.start();
+
 app.listen(8090, function(){
   console.log("Listening on port 8090");
 });

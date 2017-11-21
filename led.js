@@ -132,9 +132,11 @@ function showNumber(number, show_decimal, fit){
 	}
 }
 var messageTimer = null;
+var messageDone = function(){};
+var messageCanceled = function(){};
 function showMessage(message, speed, fit){
 	//if(messageTimer != null) throw "Scrolling message already active";
-	if(messageTimer != null) clearInterval(messageTimer);
+	if(messageTimer != null) {messageCanceled(); clearInterval(messageTimer);}
 	if(fit == undefined) fit = 8;
 	message = message.split('');
 	var buffer = [];
@@ -147,10 +149,16 @@ function showMessage(message, speed, fit){
 		show(buffer);
 		if(++indexInMessage >= message.length){
 			clearInterval(messageTimer);
+			messageDone();
 			messageTimer = null;
 		}
 	}
 	messageTimer = setInterval(interval, speed || 500);
+
+	return new Promise(function(resolve, reject){
+		messageDone = resolve;
+		messageCanceled = reject;
+	});
 }
 init();
 show(['','','','','','','','']);
